@@ -11,7 +11,7 @@ const char* password = "#BossRaLuchas03";
 const char* serverName = "http://192.168.86.246:60000/post-data";
 
 // DHT Sensor setup
-#define DHTPIN 4       // Pin connected to the DHT sensor
+#define DHTPIN 27     // Pin connected to the DHT sensor
 #define DHTTYPE DHT22  // DHT 22 (AM2302)
 DHT dht(DHTPIN, DHTTYPE);
 float currentTempC = 0.0;
@@ -42,10 +42,10 @@ void setup() {
   }
   Serial.println("Connected to WiFi!!");
   Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, false /*Serial Enable*/);
-  currentTempC = dht.readTemperature();
-  currentTempF = dht.readTemperature(true);
-  currentHumidity = dht.readHumidity();
-  displayReadingsOnOled();
+  // currentTempC = dht.readTemperature();
+  // currentTempF = dht.readTemperature(true);
+  // currentHumidity = dht.readHumidity();
+  // displayReadingsOnOled();
 }
 
 void loop() {
@@ -65,8 +65,8 @@ void loop() {
       currentTempC = tempC;
       currentTempF = tempF;
       currentHumidity = humi;
-      // Prepare data string
-      String httpRequestData = "team_number=2";
+      displayReadingsOnOled();
+      String httpRequestData = "team_number=9";
       httpRequestData += "&temperature=" + String(tempC);
       httpRequestData += "&humidity=" + String(humi);
       httpRequestData += "&timestamp=" + String(millis());
@@ -85,10 +85,9 @@ void loop() {
         Serial.println(httpResponseCode);
       }
     }
-
     http.end();
   } else {
     Serial.println("WiFi Disconnected");
   }
-  delay(10000);  // Send data every 10 seconds
+  delay(1000);  // Send data every 10 seconds
 }
